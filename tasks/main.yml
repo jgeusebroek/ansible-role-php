@@ -1,0 +1,80 @@
+---
+- name: Include OS-specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Define php_packages
+  set_fact:
+    php_packages: "{{ __php_packages | list }}"
+  when: php_packages is not defined
+
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+
+- name: Fetch PHP version
+  shell: '{{ php_executable }} -r "echo PHP_MAJOR_VERSION . \" \" . PHP_MINOR_VERSION . \" \" . PHP_RELEASE_VERSION . \" \" . PHP_EXTRA_VERSION;"'
+  register: php_version
+  changed_when: False
+  always_run: yes
+  tags: skip_ansible_lint
+
+- name: Set PHP version facts
+  set_fact:
+    php_major_version: "{{ php_version.stdout.split(' ')[0] }}"
+    php_minor_version: "{{ php_version.stdout.split(' ')[1] }}"
+    php_release_version: "{{ php_version.stdout.split(' ')[2] }}"
+    php_extra_version: "{{ php_version.stdout.split(' ')[3] }}"
+  always_run: yes
+  changed_when: False
+  tags: skip_ansible_lint
+
+- name: Define php_conf_path
+  set_fact:
+    php_conf_path: "{{ __php5_conf_path if php_major_version == '5' else __php7_conf_path }}"
+  when: php_conf_path is not defined
+
+- name: Define php_ini_path
+  set_fact:
+    php_ini_path: "{{ __php_ini_path }}"
+  when: php_ini_path is not defined
+
+- name: Define opcache_conf_filename
+  set_fact:
+    php_opcache_conf_filename: "{{ __php_opcache_conf_filename }}"
+  when: php_opcache_conf_filename is not defined
+
+- name: Define fpm pid file location
+  set_fact:
+    php_fpm_pid: "{{ __php_fpm_pid }}"
+  when: php_fpm_pid is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+
+- name: Define fpm error log location
+  set_fact:
+    php_fpm_error_log: "{{ __php_fpm_error_log }}"
+  when: php_fpm_error_log is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+
+- name: Define pools configs path
+  set_fact:
+    php_fpm_pools_path: "{{ __php_fpm_pools_path }}"
+  when: php_fpm_pools_path is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+
+- name: Define php_extentions_conf_path
+  set_fact:
+    php_extension_conf_path: "{{ __php5_extension_conf_path if php_major_version == '5' else __php7_extension_conf_path }}"
+  when: php_extension_conf_path is not defined
+
+- name: Disable opcache if PHP version is < 5.5.
+  set_fact:
+    php_opcache_enable: 0
+  when: "php_major_version == '5' and php_minor_version < '5'"
+
+- include: configure.yml
+
+- name: Enable and start php-fpm deamon
+  service:
+    name: "{{ php_fpm_daemon }}"
+    state: started
+    enabled: yes
+  when: php_enable_fpm and php_install_type == 'fpm'

@@ -1,0 +1,52 @@
+---
+- hosts: debian
+  tasks:
+    - name: Install required packages
+      package:
+        name: '{{ item }}'
+        state: present
+      with_items:
+        - ca-certificates
+        - apt-transport-https
+    - name: Add GPG key PHP repository
+      apt_key:
+        url: 'https://packages.sury.org/php/apt.gpg'
+    - name: Add PHP repository (Ondřej Surý)
+      apt_repository:
+        repo: '{{ item }}'
+        state: present
+        update_cache: yes
+      with_items:
+        - "deb https://packages.sury.org/php {{ ansible_distribution_release }} main"
+
+- hosts: centos7
+  roles:
+    - { role: jgeusebroek.epel, when: ansible_os_family == 'RedHat' }
+  tasks:
+    - name: Install webstatic repository
+      yum:
+        name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+        state: present
+
+- hosts: ubuntu
+  tasks:
+    - name: Install ca-certificates
+      package:
+        name: ca-certificates
+        state: present
+
+    - name: Add PHP ppa repository (Ondřej Surý)
+      apt_repository:
+        repo: 'ppa:ondrej/php'
+
+- hosts: all
+  vars:
+    php_fpm_pools:
+      "www":
+        listen: '0.0.0.0:9000'
+        custom_settings:
+          security.limit_extensions: '.php'
+
+  roles:
+    - { role: jgeusebroek.php, php_packages: [ "php7.1-cli", "php7.1-fpm", "php7.1-opcache" ], php_sync_environment_config: true, when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' }
+    - { role: jgeusebroek.php, php_packages: [ "php71w-cli", "php71w-fpm", "php71w-opcache" ], when: ansible_distribution == 'CentOS' }

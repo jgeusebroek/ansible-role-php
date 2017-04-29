@@ -1,0 +1,73 @@
+---
+# What kind of install? cli, apache2 or fpm (default)
+php_install_type: "fpm"
+php_install_types:
+  - fpm
+  - cli
+  - apache2
+
+# Filter out the current install type from the list of install types
+php_install_types_filtered: '{{ php_install_types|difference(php_install_type)}}'
+
+php_manage_fpm: True
+php_enable_fpm: True
+
+php_fpm_custom_settings: {}
+
+php_fpm_pools:
+  "www":
+    listen: '{{ php_fpm_socket_path }}/www.sock'
+
+php_fpm_pools_remove_unmanaged: True
+
+php_fpm_pool_pm: dynamic
+php_fpm_pool_max_children: "{{ ansible_processor_vcpus * 2 }}"
+php_fpm_pool_start_servers: 3
+php_fpm_pool_min_spare_servers: 1
+php_fpm_pool_max_spare_servers: 3
+php_fpm_pool_status_path: /fpm-status
+
+# Debian splits the configation in cli, fpm, and apache2 configurations.
+# When enabled the configuration for this install type is synced to the other 2 environments.
+
+# NOTE: this might result in also copying FPM specific configuration to the other environments,
+# but this shouldn't cause any problems.
+php_sync_environment_config: False
+
+# Restart apache when changes to the PHP config are made
+php_restart_apache2: True
+
+# The executable to run when calling PHP from the command line. Used to fetch the PHP version.
+php_executable: "php"
+
+# PHP ini default settings
+php_short_open_tag: "Off"
+php_expose_php: "Off"
+php_max_execution_time: "30"
+php_max_input_time: "60"
+php_memory_limit: "128M"
+php_display_errors: "Off"
+php_display_startup_errors: "Off"
+php_log_errors: "On"
+php_html_errors: "On"
+php_post_max_size: "64M"
+php_file_uploads: "On"
+php_upload_max_filesize: "64M"
+php_date_timezone: "Europe/Amsterdam"
+php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
+
+php_ini_custom_settings: {}
+
+# Opcache default settings
+php_opcache_enabled_in_ini: True
+php_opcache_enable: 1
+php_opcache_enable_cli: "Off"
+php_opcache_memory_consumption: "64"
+php_opcache_interned_strings_buffer: "4"
+php_opcache_max_accelerated_files: "2000"
+php_opcache_max_wasted_percentage: "5"
+php_opcache_validate_timestamps: "1"
+php_opcache_revalidate_freq: "2"
+php_opcache_max_file_size: "0"
+
+php_opcache_custom_settings: {}

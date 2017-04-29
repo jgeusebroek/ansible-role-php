@@ -1,0 +1,34 @@
+---
+__php_packages:
+  - php5-cli
+  - php5-fpm
+  - php5-mysql
+  - php5-curl
+  - php5-gd
+  - php5-mcrypt
+  - php5-json
+
+__php_conf_base: "{{ '/etc/php/' + php_major_version|string + '.' + php_minor_version|string if php_major_version == '7' else '/etc/php5'}}"
+__php5_conf_path: "{{ (php_install_type == 'fpm')|ternary('/etc/php5/fpm', (php_install_type == 'apache2')|ternary('/etc/php5/apache2', '/etc/php5/cli')) }}"
+__php7_conf_path: "{{ (php_install_type == 'fpm')|ternary('/etc/php/' + php_major_version|string + '.' + php_minor_version|string + '/fpm', (php_install_type == 'apache2')|ternary('/etc/php/' + php_major_version|string + '.' + php_minor_version|string + '/apache2', '/etc/php/' + php_major_version|string + '.' + php_minor_version|string + '/cli')) }}"
+
+__php5_extension_conf_path: "{{ __php_conf_base}}/mods-available"
+__php7_extension_conf_path: "{{ __php_conf_base }}/mods-available"
+
+__php_opcache_conf_filename: opcache.ini
+__php_ini_path: '{{ php_conf_path }}/php.ini'
+
+__php_fpm_conf_path: '{{ php_conf_path }}/php-fpm.conf'
+__php_fpm_pid: "/run/php{{ php_major_version|string + '.' + php_minor_version|string }}-fpm.pid"
+__php_fpm_error_log: "/var/log/php{{ php_major_version|string + '.' + php_minor_version|string }}-fpm.log"
+__php_fpm_pools_path: "{{ php_conf_path }}/pool.d"
+
+php5_fpm_daemon: "php5-fpm"
+php7_fpm_daemon: "php{{ php_major_version|string + '.' + php_minor_version|string }}-fpm"
+php_fpm_daemon: "{{ php5_fpm_daemon if php_major_version == '5' else php7_fpm_daemon }}"
+
+php_fpm_user: www-data
+php_fpm_group: www-data
+php_fpm_socket_path: /var/run
+
+php_apache_daemon: apache2

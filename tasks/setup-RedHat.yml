@@ -1,0 +1,6 @@
+---
+- name: Ensure PHP packages are installed | Redhat
+  yum:
+    name: "{{ item }}"
+    state: installed
+  with_items: '{{ php_packages }}'

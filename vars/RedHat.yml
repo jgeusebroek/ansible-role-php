@@ -1,0 +1,32 @@
+---
+__php_packages:
+  - php-cli
+  - php-fpm
+  - php-mysql
+  - php-curl
+  - php-gd
+  - php-mcrypt
+  - php-json
+  - php-pdo
+
+__php_conf_base: '{{ php_conf_path }}' # only makes sense with Debian hosts
+__php5_conf_path: /etc
+__php7_conf_path: /etc
+
+__php5_extension_conf_path: "{{ php_conf_path }}/php.d"
+__php7_extension_conf_path: "{{ php_conf_path }}/php.d"
+
+__php_opcache_conf_filename: opcache.ini
+__php_ini_path: '{{ php_conf_path }}/php.ini'
+
+__php_fpm_conf_path: '{{ php_conf_path }}/php-fpm.conf'
+__php_fpm_pid: '/run/php-fpm/php-fpm.pid'
+__php_fpm_error_log: "/var/log/php-fpm/error.log"
+__php_fpm_pools_path: "{{ php_conf_path }}/php-fpm.d"
+
+php_fpm_daemon: php-fpm
+php_fpm_user: apache
+php_fpm_group: apache
+php_fpm_socket_path: /var/run/php-fpm
+
+php_apache_daemon: httpd

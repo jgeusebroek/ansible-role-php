@@ -1,0 +1,12 @@
+---
+- name: Restart apache2
+  service:
+    name: "{{ php_apache_daemon }}"
+    state: restarted
+  when: php_restart_apache2 and php_install_type == 'apache2'
+
+- name: Reload php-fpm
+  service:
+    name: "{{ php_fpm_daemon }}"
+    state: reloaded
+  when: php_manage_fpm == True and php_install_type == 'fpm'
