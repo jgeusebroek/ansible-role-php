@@ -5,7 +5,7 @@ ansible:
     deprecation_warnings: False
 dependency:
   name: galaxy
-  requirements_file: requirements.yml
+  requirements_file: tests/requirements.yml
 driver:
   name: docker
 docker:
