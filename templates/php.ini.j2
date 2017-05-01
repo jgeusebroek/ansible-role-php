@@ -1662,9 +1662,10 @@ ldap.max_links = -1
 ;openssl.capath=
 
 ; Local Variables:
-{% if php_ini_custom_settings is defined and php_ini_custom_settings is iterable %}
-{% for config_item in php_ini_custom_settings %}
-{{ config_item }}
+{% if php_ini_custom_settings is defined and php_ini_custom_settings %}
+; custom settings
+{% for directive, value in php_ini_custom_settings.iteritems() %}
+{{ directive }} = {{ value }}
 {% endfor %}
 {% endif %}
 

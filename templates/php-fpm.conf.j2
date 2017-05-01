@@ -126,8 +126,9 @@ error_log = {{ php_fpm_error_log }}
 ;  - /usr otherwise #}
 include={{ php_fpm_pools_path }}/*.conf
 
-{% if php_fpm_custom_settings is defined and php_fpm_custom_settings is iterable %}
-{% for config_item in php_fpm_custom_settings %}
-{{ config_item }}
+{% if php_fpm_custom_settings is defined and php_fpm_custom_settings %}
+; custom settings
+{% for directive, value in php_fpm_custom_settings.iteritems() %}
+{{ directive }} = {{ value }}
 {% endfor %}
 {% endif %}
