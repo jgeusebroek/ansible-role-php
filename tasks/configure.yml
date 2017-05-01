@@ -5,7 +5,9 @@
     dest: '{{ php_ini_path }}'
     owner: 'root'
     group: 'root'
-  notify: Restart apache2
+  notify:
+    - Reload php-fpm
+    - Restart apache2
 
 - name: Ensure OpCache configuration is in place
   template:
@@ -14,7 +16,9 @@
     owner: 'root'
     group: 'root'
   when: php_opcache_enable
-  notify: Restart apache2
+  notify:
+    - Reload php-fpm
+    - Restart apache2
 
 - name: Ensure php-fpm configuration is in place
   template:
