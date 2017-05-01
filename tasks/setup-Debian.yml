@@ -9,3 +9,6 @@
     name: "{{ item }}"
     state: installed
   with_items: '{{ php_packages }}'
+  notify:
+    - Reload php-fpm
+    - Restart apache2
