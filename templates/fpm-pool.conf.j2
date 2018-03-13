@@ -16,28 +16,28 @@ pm.status_path       = {{ item.value.status_path if item.value.status_path is de
 
 {% if item.value.custom_settings is defined and item.value.custom_settings is iterable %}
 ; custom settings
-{% for directive, value in item.value.custom_settings.iteritems() %}
+{% for directive, value in item.value.custom_settings.items() %}
 {{ directive }} = {{ value }}
 {% endfor %}
 {% endif %}
 
-{% if item.value.php_lags is defined and item.value.php_flags is iterable %}
+{% if item.value.php_flags is defined and item.value.php_flags is iterable %}
 ; custom php_flags
-{% for directive, value in item.value.php_flags.iteritems() %}
+{% for directive, value in item.value.php_flags.items() %}
 php_flag[{{ directive }}] = {{ value }}
 {% endfor %}
 {% endif %}
 
 {% if item.value.php_admin_flags is defined and item.value.php_admin_flags is iterable %}
 ; custom php_admin_flags
-{% for directive, value in item.value.php_admin_flags.iteritems() %}
+{% for directive, value in item.value.php_admin_flags.items() %}
 php_admin_flag[{{ directive }}] = {{ value }}
 {% endfor %}
 {% endif %}
 
 {% if item.value.php_admin_values is defined and item.value.php_admin_values is iterable %}
 ; custom php_admin_values
-{% for directive, value in item.value.php_admin_values.iteritems() %}
+{% for directive, value in item.value.php_admin_values.items() %}
 php_admin_value[{{ directive }}] = {{ value }}
 {% endfor %}
 {% endif %}
