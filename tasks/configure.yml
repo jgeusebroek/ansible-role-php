@@ -62,7 +62,7 @@
 
 - name: Synchronize configurations (cli, fpm & apache2 environments will have the same configuration) | Debian
   shell: 'rsync -avh --delete {{ php_conf_path }}/ {{ __php_conf_base }}/{{ item }}/'
-  always_run: yes
+  check_mode: no
   changed_when: False
   with_items: '{{ php_install_types_filtered }}'
   when: ansible_os_family == 'Debian' and php_sync_environment_config == True
