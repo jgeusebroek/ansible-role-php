@@ -5,10 +5,9 @@
     cache_valid_time: 86400
 
 - name: Ensure PHP packages are installed | Debian
-  apt:
-    name: "{{ item }}"
-    state: installed
-  with_items: '{{ php_packages }}'
+  package:
+    name: "{{ php_packages }}"
+    state: present
   notify:
     - Reload php-fpm
     - Restart apache2
