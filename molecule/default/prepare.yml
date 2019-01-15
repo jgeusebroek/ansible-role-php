@@ -1,0 +1,54 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Install required packages (Debian)
+      package:
+        name: '{{ item }}'
+        state: present
+      with_items:
+        - ca-certificates
+        - apt-transport-https
+      when: ansible_distribution == 'Debian'
+
+    - name: Add GPG key PHP repository (Debian)
+      apt_key:
+        url: 'https://packages.sury.org/php/apt.gpg'
+      when: ansible_distribution == 'Debian'
+
+    - name: Add PHP repository (Ondřej Surý) (Debian)
+      apt_repository:
+        repo: '{{ item }}'
+        state: present
+        update_cache: yes
+      with_items:
+        - "deb https://packages.sury.org/php {{ ansible_distribution_release }} main"
+      when: ansible_distribution == 'Debian'
+
+- hosts: all
+
+  roles:
+    - { role: jgeusebroek.epel, when: ansible_os_family == 'RedHat' }
+
+  tasks:
+    - name: Install webstatic repository (Redhat)
+      yum:
+        name: https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+- hosts: all
+
+  tasks:
+
+    - name: Install ca-certificates (Ubuntu)
+      package:
+        name: ca-certificates
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Add PHP ppa repository (Ondřej Surý) (Ubuntu)
+      apt_repository:
+        repo: 'ppa:ondrej/php'
+        codename: "{{ ansible_distribution_release }}"
+      when: ansible_distribution == 'Ubuntu'
