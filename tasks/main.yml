@@ -48,17 +48,17 @@
 - name: Define fpm pid file location
   set_fact:
     php_fpm_pid: "{{ __php_fpm_pid }}"
-  when: php_fpm_pid is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_fpm_pid is not defined and php_manage_fpm and php_install_type == 'fpm'
 
 - name: Define fpm error log location
   set_fact:
     php_fpm_error_log: "{{ __php_fpm_error_log }}"
-  when: php_fpm_error_log is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_fpm_error_log is not defined and php_manage_fpm and php_install_type == 'fpm'
 
 - name: Define pools configs path
   set_fact:
     php_fpm_pools_path: "{{ __php_fpm_pools_path }}"
-  when: php_fpm_pools_path is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_fpm_pools_path is not defined and php_manage_fpm and php_install_type == 'fpm'
 
 - name: Define php_extentions_conf_path
   set_fact:
