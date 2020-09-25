@@ -9,8 +9,8 @@ php_install_types:
 # Filter out the current install type from the list of install types
 php_install_types_filtered: '{{ php_install_types|difference(php_install_type)}}'
 
-php_manage_fpm: True
-php_enable_fpm: True
+php_manage_fpm: true
+php_enable_fpm: true
 
 php_fpm_custom_settings: {}
 
@@ -18,7 +18,7 @@ php_fpm_pools:
   "www":
     listen: '{{ php_fpm_socket_path }}/www.sock'
 
-php_fpm_pools_remove_unmanaged: True
+php_fpm_pools_remove_unmanaged: true
 
 php_fpm_pool_pm: dynamic
 php_fpm_pool_max_children: "{{ ansible_processor_vcpus * 2 }}"
@@ -32,10 +32,10 @@ php_fpm_pool_status_path: /fpm-status
 
 # NOTE: this might result in also copying FPM specific configuration to the other environments,
 # but this shouldn't cause any problems.
-php_sync_environment_config: False
+php_sync_environment_config: false
 
 # Restart apache when changes to the PHP config are made
-php_restart_apache2: True
+php_restart_apache2: true
 
 # The executable to run when calling PHP from the command line. Used to fetch the PHP version.
 php_executable: "php"
@@ -59,7 +59,7 @@ php_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 php_ini_custom_settings: {}
 
 # Opcache default settings
-php_opcache_enabled_in_ini: True
+php_opcache_enabled_in_ini: true
 php_opcache_enable: 1
 php_opcache_enable_cli: "Off"
 php_opcache_memory_consumption: "64"

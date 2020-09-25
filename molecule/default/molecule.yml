@@ -2,16 +2,16 @@
 dependency:
   name: galaxy
   options:
-    ignore-certs: True
-    ignore-errors: True
+    ignore-certs: true
+    ignore-errors: true
     role-file: requirements.yml
 driver:
   name: docker
-lint:
-  name: yamllint
-  enabled: False
-  options:
-    config-file: travis/default/yamllint.yml
+lint: |
+  set -e
+  yamllint -c molecule/default/yamllint.yml .
+  ansible-lint
+  flake8
 platforms:
   - name: "${MOLECULE_DISTRO:-centos7}"
     image: "jgeusebroek/${MOLECULE_DISTRO:-centos7}-molecule:latest"
@@ -22,8 +22,6 @@ platforms:
     pre_build_image: true
 provisioner:
   name: ansible
-  lint:
-    name: ansible-lint
   playbooks:
     converge: ${MOLECULE_PLAYBOOK:-playbook.yml}
   inventory:
@@ -47,5 +45,3 @@ scenario:
   name: default
 verifier:
   name: testinfra
-  lint:
-    name: flake8

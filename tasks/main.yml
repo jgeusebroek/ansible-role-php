@@ -16,8 +16,8 @@
 - name: Fetch PHP version
   shell: '{{ php_executable }} -r "echo PHP_MAJOR_VERSION . \" \" . PHP_MINOR_VERSION . \" \" . PHP_RELEASE_VERSION . \" \" . PHP_EXTRA_VERSION;"'
   register: php_version
-  changed_when: False
-  check_mode: no
+  changed_when: false
+  check_mode: false
   tags: skip_ansible_lint
 
 - name: Set PHP version facts
@@ -26,8 +26,8 @@
     php_minor_version: "{{ php_version.stdout.split(' ')[1] }}"
     php_release_version: "{{ php_version.stdout.split(' ')[2] }}"
     php_extra_version: "{{ php_version.stdout.split(' ')[3] }}"
-  check_mode: no
-  changed_when: False
+  check_mode: false
+  changed_when: false
   tags: skip_ansible_lint
 
 - name: Define php_conf_path
@@ -48,17 +48,17 @@
 - name: Define fpm pid file location
   set_fact:
     php_fpm_pid: "{{ __php_fpm_pid }}"
-  when: php_fpm_pid is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_fpm_pid is not defined and php_manage_fpm and php_install_type == 'fpm'
 
 - name: Define fpm error log location
   set_fact:
     php_fpm_error_log: "{{ __php_fpm_error_log }}"
-  when: php_fpm_error_log is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_fpm_error_log is not defined and php_manage_fpm and php_install_type == 'fpm'
 
 - name: Define pools configs path
   set_fact:
     php_fpm_pools_path: "{{ __php_fpm_pools_path }}"
-  when: php_fpm_pools_path is not defined and php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_fpm_pools_path is not defined and php_manage_fpm and php_install_type == 'fpm'
 
 - name: Define php_extentions_conf_path
   set_fact:
@@ -76,5 +76,5 @@
   service:
     name: "{{ php_fpm_daemon }}"
     state: started
-    enabled: yes
+    enabled: true
   when: php_enable_fpm and php_install_type == 'fpm'

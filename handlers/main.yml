@@ -9,4 +9,4 @@
   service:
     name: "{{ php_fpm_daemon }}"
     state: reloaded
-  when: php_manage_fpm == True and php_install_type == 'fpm'
+  when: php_manage_fpm and php_install_type == 'fpm'
