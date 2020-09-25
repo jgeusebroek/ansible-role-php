@@ -9,5 +9,5 @@
           security.limit_extensions: '.php'
 
   roles:
-    - { role: jgeusebroek.php, php_packages: [ "php7.2-cli", "php7.2-fpm", "php7.2-opcache" ], php_sync_environment_config: true, when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' }
+    - { role: jgeusebroek.php, php_packages: [ "php7.3-cli", "php7.3-fpm", "php7.3-opcache" ], php_sync_environment_config: true, when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' }
     - { role: jgeusebroek.php, php_packages: [ "php71w-cli", "php71w-fpm", "php71w-opcache" ], when: ansible_distribution == 'CentOS' }

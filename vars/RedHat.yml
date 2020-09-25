@@ -9,7 +9,7 @@ __php_packages:
   - php-json
   - php-pdo
 
-__php_conf_base: '{{ php_conf_path }}' # only makes sense with Debian hosts
+__php_conf_base: '{{ php_conf_path }}'    # only makes sense with Debian hosts
 __php5_conf_path: /etc
 __php7_conf_path: /etc
 

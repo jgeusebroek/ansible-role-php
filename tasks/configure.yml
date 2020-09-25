@@ -32,7 +32,7 @@
 - name: Find configured fpm pools
   shell: ls -1 {{ php_fpm_pools_path }}
   register: configured_pools
-  changed_when: False
+  changed_when: false
   when: php_manage_fpm and php_fpm_pools_remove_unmanaged and php_install_type == 'fpm'
   tags: skip_ansible_lint
 
@@ -51,7 +51,7 @@
     owner: 'root'
     group: 'root'
   with_dict: '{{ php_fpm_pools }}'
-  no_log: True
+  no_log: true
   when: php_manage_fpm and php_install_type == 'fpm'
   notify: Reload php-fpm
 
@@ -62,8 +62,8 @@
 
 - name: Synchronize configurations (cli, fpm & apache2 environments will have the same configuration) | Debian
   shell: 'rsync -avh --delete {{ php_conf_path }}/ {{ __php_conf_base }}/{{ item }}/'
-  check_mode: no
-  changed_when: False
+  check_mode: false
+  changed_when: false
   with_items: '{{ php_install_types_filtered }}'
   when: ansible_os_family == 'Debian' and php_sync_environment_config
   tags: skip_ansible_lint
