@@ -7,10 +7,10 @@
     php_packages: "{{ __php_packages | list }}"
   when: php_packages is not defined
 
-- include: setup-Debian.yml
+- include_tasks: setup-Debian.yml
   when: ansible_os_family == 'Debian'
 
-- include: setup-RedHat.yml
+- include_tasks: setup-RedHat.yml
   when: ansible_os_family == 'RedHat'
 
 - name: Fetch PHP version
@@ -70,7 +70,7 @@
     php_opcache_enable: 0
   when: "php_major_version == '5' and php_minor_version < '5'"
 
-- include: configure.yml
+- include_tasks: configure.yml
 
 - name: Enable and start php-fpm deamon
   service:
